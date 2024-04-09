@@ -1,7 +1,23 @@
 import os
 import argparse
+import mimetypes
 import fnmatch
 
+def is_binary(filename):
+    """
+    Check if a file is binary. This is a simple heuristic based on the presence of null bytes.
+    """
+    try:
+        with open(filename, 'rb') as file:
+            for chunk in file.read(1024):
+                if b'\0' in chunk:
+                    return True
+        return False
+    except Exception as e:
+        print(f"Error reading {filename}: {e}")
+        return True
+
+    
 def load_gitignore_patterns(directory):
     """
     Load and return patterns from .gitignore if it exists.
@@ -27,7 +43,7 @@ def scrape_directory_to_plaintext(directory):
     Recursively scrape the directory, converting files to plaintext and generating a file structure.
     """
     gitignore_patterns = load_gitignore_patterns(directory)
-    default_skip_list = ['README*', '.DS_Store', 'node_modules/*']
+    default_skip_list = ['README*', '.DS_Store', 'node_modules/*', '__pycache__/*', 'artifacts/*', '*.jpg', '*.jpeg', '*.png', '*.gif', '*.bmp', '*.ico', '*.svg', '*.pdf', '*.doc', '*.docx', '*.xls', '*.xlsx', '*.ppt', '*.pptx']
     file_structure = []
     all_text_content = []
 

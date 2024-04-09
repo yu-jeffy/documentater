@@ -7,18 +7,16 @@ def load_file_content(file_path):
     with open(file_path, 'r', encoding='utf-8') as file:
         return file.read()
 
-def prepare_prompt(file_structure_path, all_text_content_path):
+def prepare_prompt(file_structure, all_text_content):
     """
     Prepare the prompt for the GPT-4 API by combining the file structure and all text content.
     """
-    file_structure = load_file_content(file_structure_path)
-    all_text_content = load_file_content(all_text_content_path)
-
     prompt = f"Given the following file structure:\n{file_structure}\n\n" \
              f"and the content of the files:\n{all_text_content}\n\n" \
              "Generate a comprehensive README/documentation for the project."
     
     return prompt
+
 
 def main():
     prompt = prepare_prompt("file_structure.txt", "all_text_content.txt")

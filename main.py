@@ -8,8 +8,8 @@ def main(directory):
     # Step 1: Scrape the directory to plaintext and generate file structure
     file_structure, all_text_content = scrape_directory_to_plaintext(directory)
     
-    # Step 2: Prepare the prompt for GPT-4
-    prompt = prepare_prompt(file_structure, all_text_content)
+    # Step 2: Prepare the prompt for GPT-4 directly with the content
+    prompt = prepare_prompt(file_structure, all_text_content)  # Use the content directly
     
     # Step 3: Send the prompt to GPT-4 and get the generated README/documentation
     generated_text = send_prompt_to_gpt4(prompt)
