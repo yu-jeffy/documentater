@@ -1,6 +1,12 @@
 import openai
 import os
+from dotenv import load_dotenv
+from openai import OpenAI
 
+load_dotenv()
+
+client = OpenAI()
+client.api_key = os.getenv("OPENAI_API_KEY")
 def load_prompt_from_file(file_path):
     """
     Load the prompt from a text file.
@@ -12,17 +18,21 @@ def send_prompt_to_gpt4(prompt):
     """
     Send the prepared prompt to the OpenAI GPT-4 API and return the generated text.
     """
-    openai.api_key = os.getenv("OPENAI_API_KEY")
-    response = openai.Completion.create(
-        engine="text-davinci-003",  # Use the latest available version
-        prompt=prompt,
-        max_tokens=2048,  # Adjust based on your needs
-        temperature=0.7,  # Adjust for creativity level
-        top_p=1,
-        frequency_penalty=0,
-        presence_penalty=0
-    )
-    return response.choices[0].text.strip()
+    response = client.chat.completions.create(
+        model="gpt-4-turbo-preview",
+        messages=[
+            {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": prompt}
+                ]
+            }
+        ],
+            max_tokens=1200,
+        )
+
+    content = response.choices[0].message.content
+    return content
 
 def save_generated_text(generated_text, file_path):
     with open(file_path, 'w', encoding='utf-8') as file:
